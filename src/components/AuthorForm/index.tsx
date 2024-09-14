@@ -13,31 +13,41 @@ export default function AuthorForm() {
         defaultValues:{
             name:'',
             role:'',
-            avatar_url:''
+            avatar:''
         }
     })
     
+    
 
     async function createAuthor(data:AuthorFormData){
-        const response=await api.post('/author',data);
+        const response=await api.post('/authors',data);
         return response.data
     }
 
+    async function onSubmit(data:AuthorFormData){
+        console.log(data)
+        await createAuthor(data)
+    }
+
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div>
                 <label htmlFor="name">Name</label>
-                <input type="text"  id="name" />
+                <input {...register('name')} type="text" name="name"  id="name" />
+                {errors.name && <p>{errors.name.message}</p> }
             </div>
             <div>
                 <label htmlFor="role">Role</label>
-                <input type="text"  id="role" />
+                <input {...register('role')} type="text"  id="role" name="role" />
+                {errors.role && <p>{errors.role.message}</p> }
             </div>
             <div>
                 <label htmlFor="avatar_url">Avatar</label>
-                <input type="text"  id="avatar_url" />
-            </div>
+                <input type="text"
+                {...register('avatar')} id="avatar" name="avatar" />
+                {errors.avatar && <p>{errors.avatar.message}</p> }
 
+            </div>
             <button type="submit">Submit</button>
         </form>
     )
